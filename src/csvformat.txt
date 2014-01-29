@@ -1,0 +1,20 @@
+The data files are in this form.
+
+Day:
+
+0,103
+
+0: denotes day
+103: translates to 1/03 AKA  Jan, 1
+
+Events:
+
+1,9:00,10:00,900,1000,03,1
+
+1: denotes event
+9:00:  start time display
+10:00: end time display
+900: start time as int
+1000: end time as int
+03: day
+1: mon
