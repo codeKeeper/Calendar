@@ -23,7 +23,7 @@ public class CalStruct {
 		for (Object o : motherList){
 			int key;
 			childList = (LinkedList) o;
-			key = (Integer) childList.removeFirst();
+			key = (Integer) childList.getFirst();
 			days.put(key, childList);
 		}
 	}
@@ -42,8 +42,9 @@ public class CalStruct {
 		days.put(key,temp);
 	}
 
-	private LinkedList<Event> sortList(LinkedList<Event> toSort){
+	private LinkedList<Object> sortList(LinkedList<Object> toSort){
 		Event sortTemp;
+		int saveCode = (int)toSort.removeFirst();
 		for (int x = 0; x < toSort.size() - 1; x++){
 			for (int y = 0; y < toSort.size() - 1; y++){
 				Event curr = (Event) toSort.get(y);
@@ -55,13 +56,14 @@ public class CalStruct {
 				}
 			}
 		}
+		toSort.addFirst(saveCode);
 		return toSort;
 	}
 	
 	public void addEvent(int key, Event aEvent){
 		LinkedList tempList = days.remove(key);
 		int storeEnd = 0;
-		if (aEvent.getStartTime() < aEvent.getEndTime()){
+		if (aEvent.getStartTime() > aEvent.getEndTime()){
 			storeEnd = aEvent.getEndTime();
 			aEvent.setEnd(2400);
 		}
@@ -69,7 +71,7 @@ public class CalStruct {
 		tempList = sortList(tempList);
 		days.put(key,tempList);
 		if (aEvent.getStartTime() < aEvent.getEndTime()){
-			Event nextDay = new Event(1, storeEnd, aEvent.getDescription(), aEvent.getDayCode());
+			Event nextDay = new Event(1, storeEnd, aEvent.getDescription());
 			int newKey;
 			if (((key == 131) || (key == 228)) || ((key == 331) || (key == 430))){
 				newKey = ((key / 100) * 100) + 1;

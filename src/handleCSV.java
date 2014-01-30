@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
 import java.util.*;
 
 /*
@@ -16,7 +17,7 @@ import java.util.*;
 public class handleCSV{
 
 	public static LinkedList<Object> readCSV(){
-		String filePath = "exampledata.csv";
+		String filePath = "rundata.csv";
 		BufferedReader br = null;
 		String line = "";
 		String csvSplit = ",";
@@ -24,12 +25,17 @@ public class handleCSV{
 		LinkedList<Object> currDay = null; //Take note, when returned the first element is a 
 		Event currEvent = null;
 		try {
+			File f = new File(filePath);
+			if (!f.exists()){
+				filePath = "Clean_Slate.csv";
+			}
+
 			br = new BufferedReader(new FileReader(filePath));
 			while ((line = br.readLine()) != null) {
 				String[] events = line.split(csvSplit);
 				switch (events[0].charAt(0)){
 					case '0':
-						currEvent = new Event(Integer.parseInt(events[1]), Integer.parseInt(events[2]), events[3], currDay.getFirst());
+						currEvent = new Event(Integer.parseInt(events[1]), Integer.parseInt(events[2]), events[3]);
 						currDay.addLast(currEvent);
 						break;
 					case '1':
@@ -58,27 +64,41 @@ public class handleCSV{
 				}
 			}
 		}
+		System.out.println(days);
+		System.out.println(filePath);
 		return days;
 	}
 
 	public static LinkedList<Object> writeCSV(HashMap<Integer,LinkedList<Object>> data){
-		LinkedList<Event> day;
-		String filePath = "/home/campus18/rlmcnall-adm/Desktop/exampledata.csv";
+		LinkedList<Object> day;
+		String filePath = "rundata.csv";
+		LinkedList<Object> temp;
+		int firstDay;
 		try {
 			FileWriter writer = new FileWriter(filePath);
-		for (Object o : data.values()){
-			day = (LinkedList<Event>) o;
-			writer.append("1,");
-			writer.append( Integer.toString(((Event)day.getFirst()).getDayCode()) );
-			writer.append("\n");
-			for(Event e : day){
-				writer.append("0");
-				writer.append( Integer.toString(e.getStartTime()) );
-				writer.append( Integer.toString(e.getEndTime()) ) ;
-				writer.append(e.getDescription());
+			Set<Integer> keys = data.keySet();
+			System.out.println(keys);
+			for (Object o : data.values()){
+				day = (LinkedList<Object>) o;
+				writer.append("1,");
 				writer.append("\n");
+				firstDay = 0;
+				for(Object e : day){
+					if (firstDay == 0){
+						writer.append("1,");
+						writer.append(Integer.toString((int)e));
+						writer.append("\n");
+						firstDay = 1;
+						continue;
+					}
+					writer.append("0,");
+					writer.append( Integer.toString(((Event)e).getStartTime()) + "," );
+					writer.append( Integer.toString(((Event)e).getEndTime()) + "," ) ;
+					writer.append(((Event)e).getDescription());
+					writer.append("\n");
+				}
 			}
-		}
+			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
