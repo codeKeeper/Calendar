@@ -6,6 +6,7 @@ public class Event{
 	private int startTime;
 	private int endTime;
 	private String description;
+	private int dayCode;
 
 	//Special number if != 0 this event has a sibling
 	//This number is the sum of the start and end of the initial submitted event that was split into two
@@ -15,10 +16,11 @@ public class Event{
 	private Calendar end;
 	private String description;*/
 	
-	public Event (int st, int et, String des){
+	public Event (int st, int et, String des, int code){
 		startTime = st;
 		endTime = et;
 		description = des;
+		dayCode = code;
 		String timeString = Integer.toString(startTime);
 		if (st >= 1000){
 			startTimeDisplay = timeString.substring(0,2) + ":" + timeString.substring(2,4);
@@ -37,6 +39,10 @@ public class Event{
 		this.setDescription(description);*/
 	}
 		
+
+	public int getDayCode(){
+		return dayCode;
+	}
 
 	public String getStartDisplay(){
 		return startTimeDisplay;
@@ -57,16 +63,15 @@ public class Event{
 		return copy;
 	}
 
-	public String getDay(){
-		return day;
+	public void setEnd(int aend) {
+		endTime = aend;
 	}
 
-	public int getMonth(){
-		int copy = month;
-		return copy;
+	public String getDescription() {
+		return description;
 	}
 
-	public int hashCode(){
+	/*public int hashCode(){
 		String fh = Integer.toString(month);
 		String result = fh + day;
 		int ret = Integer.parseInt(result);
@@ -78,22 +83,14 @@ public class Event{
 	}
 
 	public void setStart(Calendar start) {
-		this.start = start;
+		startTime = start;
 	}
 
 	public Calendar getEnd() {
 		return end;
 	}
 
-	public void setEnd(Calendar end) {
-		this.end = end;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	public void setDescription(String adescription) {
+		description = adescription;
+	}*/
 }

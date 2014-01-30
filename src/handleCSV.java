@@ -29,13 +29,12 @@ public class handleCSV{
 				String[] events = line.split(csvSplit);
 				switch (events[0].charAt(0)){
 					case '0':
-						currEvent = new Event(events[1], events[2], Integer.parseInt(events[3])
-							, Integer.parseInt(events[4]), events[5], Integer.parseInt(events[6]));
+						currEvent = new Event(Integer.parseInt(events[1]), Integer.parseInt(events[2]), events[3], currDay.getFirst());
 						currDay.addLast(currEvent);
 						break;
 					case '1':
 						if (currDay != null){
-							days.addLast(currDay);7
+							days.addLast(currDay);
 						}
 						currDay = new LinkedList<Object>();
 						currDay.addLast(Integer.parseInt(events[1]));
@@ -63,30 +62,26 @@ public class handleCSV{
 	}
 
 	public static LinkedList<Object> writeCSV(HashMap<Integer,LinkedList<Object>> data){
-		LinkedList<Object> day;
+		LinkedList<Event> day;
 		String filePath = "/home/campus18/rlmcnall-adm/Desktop/exampledata.csv";
 		try {
 			FileWriter writer = new FileWriter(filePath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		for (Object o : data.values()){
-			day = (LinkedList<Object>) o;
+			day = (LinkedList<Event>) o;
 			writer.append("1,");
-			writer.append( ((Event)day.getFirst()).hashCode() );
+			writer.append( Integer.toString(((Event)day.getFirst()).getDayCode()) );
 			writer.append("\n");
 			for(Event e : day){
 				writer.append("0");
-				writer.append(e.startTimeDisplay);
-				writer.append(e.endTimeDisplay);
-				writer.append(e.startTime);
-				writer.append(e.endTime);
-				writer.append(e.day);
-				writer.append(e.month);
-				writer.append(e.description);
+				writer.append( Integer.toString(e.getStartTime()) );
+				writer.append( Integer.toString(e.getEndTime()) ) ;
+				writer.append(e.getDescription());
 				writer.append("\n");
 			}
+		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}

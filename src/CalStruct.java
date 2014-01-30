@@ -7,11 +7,13 @@ import java.util.*;
 
 */
 
+	//this is a test comment
+
 public class CalStruct {
-	private HashMap<Integer,LinkedList> days;
+	private HashMap<Integer,LinkedList<Object>> days;
 
 	public CalStruct(){
-		days = new HashMap<Integer,LinkedList>();
+		days = new HashMap<Integer,LinkedList<Object>>();
 		populateMap();
 	}
 
@@ -27,7 +29,7 @@ public class CalStruct {
 	}
 
 	public void writeData(){
-		writeCSV(days);
+		handleCSV.writeCSV(days);
 	}
 
 	public LinkedList<Object> getDay(int key){
@@ -53,22 +55,23 @@ public class CalStruct {
 				}
 			}
 		}
+		return toSort;
 	}
 	
 	public void addEvent(int key, Event aEvent){
 		LinkedList tempList = days.remove(key);
-		int storeEnd;
+		int storeEnd = 0;
 		if (aEvent.getStartTime() < aEvent.getEndTime()){
-			storeEnd = aEvent.getEndTime;
-			aEvent.setEndTime(2400);
+			storeEnd = aEvent.getEndTime();
+			aEvent.setEnd(2400);
 		}
 		tempList.addLast(aEvent);
 		tempList = sortList(tempList);
 		days.put(key,tempList);
 		if (aEvent.getStartTime() < aEvent.getEndTime()){
-			Event nextDay = new Event(1, storeEnd, aEvent.getDescription);
+			Event nextDay = new Event(1, storeEnd, aEvent.getDescription(), aEvent.getDayCode());
 			int newKey;
-			if (((key == 131) || (key == 228)) || ((key == 331) || (key == 430)){
+			if (((key == 131) || (key == 228)) || ((key == 331) || (key == 430))){
 				newKey = ((key / 100) * 100) + 1;
 				tempList = days.remove(newKey); 
 			} else {
