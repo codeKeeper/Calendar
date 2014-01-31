@@ -64,11 +64,10 @@ public class handleCSV{
 				}
 			}
 		}
-		System.out.println(days);
-		System.out.println(filePath);
 		return days;
 	}
 
+	@SuppressWarnings("All memebers of the data are LinkedList<Object> Trivial")
 	public static LinkedList<Object> writeCSV(HashMap<Integer,LinkedList<Object>> data){
 		LinkedList<Object> day;
 		String filePath = "rundata.csv";
@@ -77,11 +76,8 @@ public class handleCSV{
 		try {
 			FileWriter writer = new FileWriter(filePath);
 			Set<Integer> keys = data.keySet();
-			System.out.println(keys);
 			for (Object o : data.values()){
 				day = (LinkedList<Object>) o;
-				writer.append("1,");
-				writer.append("\n");
 				firstDay = 0;
 				for(Object e : day){
 					if (firstDay == 0){

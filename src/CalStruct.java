@@ -17,12 +17,13 @@ public class CalStruct {
 		populateMap();
 	}
 
+	@SuppressWarnings("Everything in the motherlist has to be a LinkedList<Object>")
 	private void populateMap(){
-		LinkedList motherList = handleCSV.readCSV();
-		LinkedList childList;
+		LinkedList<Object> motherList = handleCSV.readCSV();
+		LinkedList<Object> childList;
 		for (Object o : motherList){
 			int key;
-			childList = (LinkedList) o;
+			childList = (LinkedList<Object>) o;
 			key = (Integer) childList.getFirst();
 			days.put(key, childList);
 		}
@@ -37,7 +38,7 @@ public class CalStruct {
 	}
 
 	public void removeEvent(int key, Object aEvent){
-		LinkedList temp = days.remove(key);
+		LinkedList<Object> temp = days.remove(key);
 		temp.remove(aEvent);
 		days.put(key,temp);
 	}
@@ -61,7 +62,7 @@ public class CalStruct {
 	}
 	
 	public void addEvent(int key, Event aEvent){
-		LinkedList tempList = days.remove(key);
+		LinkedList<Object> tempList = days.remove(key);
 		int storeEnd = 0;
 		if (aEvent.getStartTime() > aEvent.getEndTime()){
 			storeEnd = aEvent.getEndTime();
@@ -70,7 +71,7 @@ public class CalStruct {
 		tempList.addLast(aEvent);
 		tempList = sortList(tempList);
 		days.put(key,tempList);
-		if (aEvent.getStartTime() < aEvent.getEndTime()){
+		if (aEvent.getStartTime() > aEvent.getEndTime()){
 			Event nextDay = new Event(1, storeEnd, aEvent.getDescription());
 			int newKey;
 			if (((key == 131) || (key == 228)) || ((key == 331) || (key == 430))){
