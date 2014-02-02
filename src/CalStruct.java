@@ -39,8 +39,61 @@ public class CalStruct {
 
 	public void removeEvent(int key, Object aEvent){
 		LinkedList<Object> temp = days.remove(key);
+		if (((Event)aEvent).getSib() != 0){
+			LinkedList<Object> others = days.remove(getNextDay(key));
+			int firstRun = 0;
+			for (Object o : others){
+				if (firstRun == 0){
+					firstRun = 1;
+					continue;
+				}
+				if (((Event)o).getSib() == ((Event)aEvent).getSib()){
+					others.remove((Event)o);
+					days.put(getNextDay(key),others);
+					break;
+				}
+			}
+			others = days.remove(getPrevDay(key));
+			firstRun = 0;
+			for (Object o : others){
+				if (firstRun == 0){
+					firstRun = 1;
+					continue;
+				}
+				if (((Event)o).getSib() == ((Event)aEvent).getSib()){
+					others.remove((Event)o);
+					days.put(getPrevDay(key),others);
+					break;
+				}
+			}
+		}
 		temp.remove(aEvent);
 		days.put(key,temp);
+	}
+
+	private int getNextDay(int key){
+		if (((key == 131) || (key == 228)) || (key == 331)){
+				return ((key / 100) * 100) + 1;
+		} else if (key == 430){
+				return 430;
+		} else {
+				return key+1;
+		}
+	}
+
+	private int getPrevDay(int key){
+		switch(key){
+			case 101:
+				return 101;
+			case 201:
+				return 131;
+			case 301:
+				return 228;
+			case 401:
+				return 331;
+			default:
+				return (key - 1);
+		}
 	}
 
 	private LinkedList<Object> sortList(LinkedList<Object> toSort){
@@ -61,29 +114,28 @@ public class CalStruct {
 		return toSort;
 	}
 	
-	public void addEvent(int key, Event aEvent){
+	public boolean addEvent(int key, Event aEvent){
 		LinkedList<Object> tempList = days.remove(key);
+		LinkedList<Object> sibList = null;
 		int storeEnd = 0;
+		if (aEvent.getStartTime() < 0 || aEvent.getEndTime() > 2400){
+			return false;
+		}
 		if (aEvent.getStartTime() > aEvent.getEndTime()){
 			storeEnd = aEvent.getEndTime();
+			aEvent.setSib(aEvent.getStartTime() * aEvent.getEndTime());
 			aEvent.setEnd(2400);
+			Event nextDay = new Event(1, storeEnd, aEvent.getDescription());
+			nextDay.setSib(aEvent.getSib());
+			int newKey = getNextDay(key);
+			sibList = days.remove(newKey);
+			sibList.addLast(nextDay);
+			sibList = sortList(sibList);
+			days.put(newKey, sibList);
 		}
 		tempList.addLast(aEvent);
 		tempList = sortList(tempList);
 		days.put(key,tempList);
-		if (aEvent.getStartTime() > aEvent.getEndTime()){
-			Event nextDay = new Event(1, storeEnd, aEvent.getDescription());
-			int newKey;
-			if (((key == 131) || (key == 228)) || ((key == 331) || (key == 430))){
-				newKey = ((key / 100) * 100) + 1;
-				tempList = days.remove(newKey); 
-			} else {
-				newKey = key + 1;
-				tempList = days.remove(newKey);
-			}
-			tempList.add(nextDay);
-			tempList = sortList(tempList);
-			days.put(newKey, tempList);
-		}
+		return true;
 	}
 }
