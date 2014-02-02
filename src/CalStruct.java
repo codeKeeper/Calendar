@@ -1,7 +1,5 @@
 import java.util.*;
 
-//Testing Branch
-
 public class CalStruct {
 	private HashMap<Integer,LinkedList<Object>> days;
 
