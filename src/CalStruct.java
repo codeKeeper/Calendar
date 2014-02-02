@@ -1,13 +1,6 @@
 import java.util.*;
 
-/*
-	--TODO--
-	removeEvent: Look into edge cases of removing events
-	addEvent: Test the sort, split event into two if it spans a day.
-
-*/
-
-	//this is a test comment
+//Testing Branch
 
 public class CalStruct {
 	private HashMap<Integer,LinkedList<Object>> days;
